@@ -15,6 +15,7 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,10 +30,8 @@ public class book implements Listener {
     //Thx John
     @EventHandler
     public void onEdit(PlayerEditBookEvent event) {
-        Iterator var2 = event.getNewBookMeta().getPages().iterator();
-        while(var2.hasNext()) {
-            String page = (String)var2.next();
-            if (!Charset.forName("ISO-8859-1").newEncoder().canEncode((page))) {
+        for (String page : event.getNewBookMeta().getPages()) {
+            if (!StandardCharsets.ISO_8859_1.newEncoder().canEncode((page))) {
                 event.setCancelled(true);
             }
         }
@@ -62,20 +61,6 @@ public class book implements Listener {
                 }
                 blockStateMeta.setBlockState(shulkerBox);
                 item.setItemMeta(meta);
-            }
-        }
-    }
-
-    @EventHandler
-    public void onJoin$0(PlayerJoinEvent e) {
-        Player player = e.getPlayer();
-        PlayerInventory inv = player.getInventory();
-        for (ItemStack item : inv.getContents()) {
-            if (item.getType() == Material.WRITTEN_BOOK) {
-                BookMeta book = (BookMeta) item.getItemMeta();
-                if (isBanBook(book)) {
-                    item.setType(Material.AIR);
-                }
             }
         }
     }
