@@ -52,8 +52,8 @@ public class book implements Listener {
                 BlockStateMeta blockStateMeta = (BlockStateMeta) meta;
                 ShulkerBox shulkerBox = (ShulkerBox) blockStateMeta.getBlockState();
                 for (ItemStack i : shulkerBox.getInventory().getContents()) {
-                    if (shulkerBox.getType() == Material.WRITTEN_BOOK) {
-                        BookMeta book = (BookMeta) item.getItemMeta();
+                    if (i.getType() == Material.WRITTEN_BOOK) {
+                        BookMeta book = (BookMeta) i.getItemMeta();
                         if (isBanBook(book)) {
                             player.getWorld().dropItem(player.getLocation(), i);
                             shulkerBox.getInventory().remove(i);
@@ -62,6 +62,20 @@ public class book implements Listener {
                 }
                 blockStateMeta.setBlockState(shulkerBox);
                 item.setItemMeta(meta);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onJoin$0(PlayerJoinEvent e) {
+        Player player = e.getPlayer();
+        PlayerInventory inv = player.getInventory();
+        for (ItemStack item : inv.getContents()) {
+            if (item.getType() == Material.WRITTEN_BOOK) {
+                BookMeta book = (BookMeta) item.getItemMeta();
+                if (isBanBook(book)) {
+                    item.setType(Material.AIR);
+                }
             }
         }
     }
