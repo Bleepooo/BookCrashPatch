@@ -1,0 +1,3 @@
+name: BookCrashPatch
+version: '${project.version}'
+main: dev.bleepo.bookcrashpatch.BookCrashPatch
