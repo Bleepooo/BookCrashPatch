@@ -25,10 +25,12 @@ public class book2 implements Listener {
         Player player = e.getPlayer();
         PlayerInventory inv = player.getInventory();
         for (ItemStack item : inv.getContents()) {
-            if (item.getType() == Material.WRITTEN_BOOK) {
-                BookMeta book = (BookMeta) item.getItemMeta();
-                if (isBanBook(book)) {
-                    item.setType(Material.AIR);
+            if (item != null) {
+                if (item.getType() == Material.WRITTEN_BOOK) {
+                    BookMeta book = (BookMeta) item.getItemMeta();
+                    if (isBanBook(book)) {
+                        item.setType(Material.AIR);
+                    }
                 }
             }
         }
