@@ -14,9 +14,7 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,21 +44,25 @@ public class book implements Listener {
         Player player = e.getPlayer();
         PlayerInventory inv = player.getInventory();
         for (ItemStack item : inv.getContents()) {
-            if (isShulker(item)) {
-                ItemMeta meta = item.getItemMeta();
-                BlockStateMeta blockStateMeta = (BlockStateMeta) meta;
-                ShulkerBox shulkerBox = (ShulkerBox) blockStateMeta.getBlockState();
-                for (ItemStack i : shulkerBox.getInventory().getContents()) {
-                    if (i.getType() == Material.WRITTEN_BOOK) {
-                        BookMeta book = (BookMeta) i.getItemMeta();
-                        if (isBanBook(book)) {
-                            player.getWorld().dropItem(player.getLocation(), i);
-                            shulkerBox.getInventory().remove(i);
+            if (item != null) {
+                if (isShulker(item)) {
+                    ItemMeta meta = item.getItemMeta();
+                    BlockStateMeta blockStateMeta = (BlockStateMeta) meta;
+                    ShulkerBox shulkerBox = (ShulkerBox) blockStateMeta.getBlockState();
+                    for (ItemStack i : shulkerBox.getInventory().getContents()) {
+                        if (i != null) {
+                            if (i.getType() == Material.WRITTEN_BOOK) {
+                                BookMeta book = (BookMeta) i.getItemMeta();
+                                if (isBanBook(book)) {
+                                    player.getWorld().dropItem(player.getLocation(), i);
+                                    shulkerBox.getInventory().remove(i);
+                                }
+                            }
                         }
                     }
+                    blockStateMeta.setBlockState(shulkerBox);
+                    item.setItemMeta(meta);
                 }
-                blockStateMeta.setBlockState(shulkerBox);
-                item.setItemMeta(meta);
             }
         }
     }
